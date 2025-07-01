@@ -1,0 +1,35 @@
+{# register.html #}
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3 class="text-center mb-4">Student Registration</h3>
+          <form method="POST">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" name="username" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" name="password" required>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success">Register</button>
+            </div>
+          </form>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <div class="alert alert-info mt-3">
+                {{ messages[0] }}
+              </div>
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

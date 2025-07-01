@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Quiz History</title>
+    <style>
+        body {
+            font-family: Inter, sans-serif;
+            background: #f2f5f9;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>My Quiz History</h2>
+        <table>
+            <tr>
+                <th>Quiz Name</th>
+                <th>Subject</th>
+                <th>Chapter</th>
+                <th>Score</th>
+                <th>Date Taken</th>
+            </tr>
+            {% for result in results %}
+            <tr>
+                <td>{{ result.quiz_name }}</td>
+                <td>{{ result.subject.name }}</td>
+                <td>{{ result.chapter }}</td>
+                <td>{{ result.score }}/{{ result.total }}</td>
+                <td>{{ result.date_taken.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>

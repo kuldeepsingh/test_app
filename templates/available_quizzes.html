@@ -1,0 +1,19 @@
+{# available_quizzes.html #}
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h3 class="mb-4">Available Quizzes</h3>
+  {% if quizzes %}
+    <ul class="list-group">
+      {% for quiz in quizzes %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ quiz.name }} ({{ quiz.chapter.name }} - {{ quiz.chapter.subject.name }})
+          <a href="/take_quiz/{{ quiz.id }}" class="btn btn-sm btn-primary">Start</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No quizzes assigned yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

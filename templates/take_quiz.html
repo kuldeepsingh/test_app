@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Take Quiz</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navigation { margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h3>{{ quiz.title }}</h3>
+    <form method="POST" action="{{ url_for('submit_quiz', quiz_id=quiz.id) }}">
+        <div id="question-container">
+            {% for q in questions %}
+            <div class="question-block" data-index="{{ loop.index0 }}" style="{% if loop.index0 != 0 %}display:none;{% endif %}">
+                <p><strong>Question {{ loop.index }}:</strong></p>
+                <pre>{{ q.question_text }}</pre>
+                <input type="text" class="form-control mt-2" name="answer_{{ q.id }}" placeholder="Your answer here">
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="navigation">
+            <button type="button" class="btn btn-secondary" id="prevBtn">Previous</button>
+            <button type="button" class="btn btn-secondary" id="nextBtn">Next</button>
+            <button type="submit" class="btn btn-success float-right">Finish Test</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const blocks = document.querySelectorAll('.question-block');
+    let current = 0;
+    document.getElementById('prevBtn').onclick = () => {
+        if (current > 0) {
+            blocks[current].style.display = 'none';
+            current--;
+            blocks[current].style.display = 'block';
+        }
+    };
+    document.getElementById('nextBtn').onclick = () => {
+        if (current < blocks.length - 1) {
+            blocks[current].style.display = 'none';
+            current++;
+            blocks[current].style.display = 'block';
+        }
+    };
+</script>
+</body>
+</html>

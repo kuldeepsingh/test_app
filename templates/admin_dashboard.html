@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Welcome, Admin!</h2>
+
+    <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="upload-tab" data-toggle="tab" href="#upload-pdf" role="tab">Upload PDF</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="students-tab" data-toggle="tab" href="#manage-students" role="tab">Manage Students</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="generate-tab" data-toggle="tab" href="#generate-test" role="tab">Generate Test</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="assign-tab" data-toggle="tab" href="#assign-test" role="tab">Assign Test</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-4">
+        <!-- Dashboard -->
+<div class="tab-pane fade show active" id="dashboard" role="tabpanel">
+    <h4 class="mb-3">Platform Statistics</h4>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="alert alert-primary">Total Students: {{ stats.students }}</div>
+        </div>
+        <div class="col-md-4">
+            <div class="alert alert-info">Total Quizzes: {{ stats.quizzes }}</div>
+        </div>
+        <div class="col-md-4">
+            <div class="alert alert-success">Total Questions: {{ stats.questions }}</div>
+        </div>
+    </div>
+
+    <h4 class="mt-5">Student Quiz Results</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Subject</th>
+                <th>Chapter</th>
+                <th>Quiz</th>
+                <th>Status</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{ result.student }}</td>
+                <td>{{ result.subject }}</td>
+                <td>{{ result.chapter }}</td>
+                <td>{{ result.quiz }}</td>
+                <td>{{ result.status }}</td>
+                <td>{{ result.score }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+        <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
+            <p>Total Students: {{ stats.students }}</p>
+            <p>Total Quizzes: {{ stats.quizzes }}</p>
+            <p>Total Questions: {{ stats.questions }}</p>
+        </div>
+
+        <!-- Upload PDF -->
+        <div class="tab-pane fade" id="upload-pdf" role="tabpanel">
+            <h4>Upload Quiz PDF</h4>
+            <form method="POST" action="{{ url_for('upload_pdf') }}" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Subject</label>
+                    <select name="subject" class="form-control" required>
+                        <option value="">Select Subject</option>
+                        <option value="Maths">Maths</option>
+                        <option value="English">English</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Civics">Civics</option>
+                        <option value="History">History</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Chapter</label>
+                    <input type="text" name="chapter" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>PDF File</label>
+                    <input type="file" name="pdf_file" class="form-control-file" required accept="application/pdf">
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+
+        <!-- Manage Students -->
+        <div class="tab-pane fade" id="manage-students" role="tabpanel">
+            <h4>Manage Students</h4>
+            <form method="POST" action="{{ url_for('add_student') }}" class="mb-3">
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" name="username" class="form-control" placeholder="Username" required>
+                    </div>
+                    <div class="col">
+                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success" type="submit">Add Student</button>
+                    </div>
+                </div>
+            </form>
+            <table class="table">
+                <thead><tr><th>Username</th><th>Actions</th></tr></thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.username }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_student', student_id=student.id) }}">
+                                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Generate Test -->
+        <div class="tab-pane fade" id="generate-test" role="tabpanel">
+            <h4 class="mt-4">Generate Test from Chapter</h4>
+            <form method="POST" action="{{ url_for('generate_test', chapter_id=0) }}" onsubmit="this.action=this.action.replace('0', document.getElementById('chapter_select').value)">
+                <div class="form-group">
+                    <label for="chapter_select">Select Chapter:</label>
+                    <select class="form-control" id="chapter_select" required>
+                        {% for subject in subjects %}
+                            {% for chapter in subject.chapters %}
+                                <option value="{{ chapter.id }}">{{ subject.name }} - {{ chapter.name }}</option>
+                            {% endfor %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Quiz</button>
+            </form>
+        </div>
+
+        <!-- Assign Test -->
+        <div class="tab-pane fade" id="assign-test" role="tabpanel">
+            <h4 class="mt-4">Assign Quiz to Students</h4>
+            <form method="POST" action="{{ url_for('assign_test') }}">
+                <div class="form-group">
+                    <label for="quiz_select">Select Quiz:</label>
+                    <select class="form-control" name="quiz_id" id="quiz_select" required>
+                        {% for quiz in quizzes %}
+                            <option value="{{ quiz.id }}">{{ quiz.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Select Students:</label><br>
+                    {% for student in students %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="student_ids" value="{{ student.id }}" id="student{{ student.id }}">
+                            <label class="form-check-label" for="student{{ student.id }}">{{ student.username }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-success">Assign</button>
+            </form>
+        </div>
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="btn btn-secondary mt-3">Logout</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+
+<!doctype html>
+<html>
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<head><title>{{ quiz.name }}</title></head>
+<body class="bg-light">
+<div class="container mt-4">
+  <h2>{{ quiz.name }}</h2>
+  <form method="post">
+    {% for question in quiz.questions %}
+      <div>
+        <p>{{ loop.index }}. {{ question.text }}</p>
+        <label><input type="radio" name="{{ question.id }}" value="A"> {{ question.option_a }}</label><br>
+        <label><input type="radio" name="{{ question.id }}" value="B"> {{ question.option_b }}</label><br>
+        <label><input type="radio" name="{{ question.id }}" value="C"> {{ question.option_c }}</label><br>
+        <label><input type="radio" name="{{ question.id }}" value="D"> {{ question.option_d }}</label><br>
+      </div>
+    {% endfor %}
+    <button type="submit">Submit</button>
+  </form>
+</div>
+</body>
+</html>
